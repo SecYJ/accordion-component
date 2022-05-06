@@ -1,32 +1,34 @@
-const accordionButtons = document.querySelectorAll(".accordion-btn");
+const accordion = document.querySelector(".accordion");
 
-accordionButtons.forEach((button) => {
-	button.addEventListener("click", (e) => {
-		const accordionCollapse = e.target.nextElementSibling;
+accordion.addEventListener("click", (e) => {
+	const accordionBtnEl = e.target.closest(".accordion-btn");
+	if (!accordionBtnEl) return;
 
-		// get height value of accordion;
-		const heightValue = Number(
-			window
-				.getComputedStyle(accordionCollapse)
-				.getPropertyValue("--height")
-				.split("px")[0]
-		);
+	const accordionCollapse = accordionBtnEl.nextElementSibling;
 
-		if (heightValue === 0) {
-			// parentElement = .accordion-item
-			e.target.parentElement.classList.add("show");
-			const accordionHeight = `${parseInt(
-				accordionCollapse.scrollHeight
-			)}px`;
+	// get height value of accordion;
+	const heightValue = Number(
+		window
+			.getComputedStyle(accordionCollapse)
+			.getPropertyValue("--height")
+			.split("px")[0]
+	);
 
-			// lastElementChild = .span icon
-			e.target.lastElementChild.style.setProperty("--rotate", "180deg");
-			accordionCollapse.style.setProperty("--height", accordionHeight);
-			return;
-		} else {
-			e.target.parentElement.classList.remove("show");
-			accordionCollapse.style.setProperty("--height", 0);
-			e.target.lastElementChild.style.setProperty("--rotate", 0);
-		}
-	});
+	if (heightValue === 0) {
+		// parentElement = .accordion-item
+		e.target.parentElement.classList.add("show");
+		const accordionHeight = `${parseInt(accordionCollapse.scrollHeight)}px`;
+
+		accordionBtnEl
+			.querySelector(".material-icons")
+			.style.setProperty("--rotate", "180deg");
+		accordionCollapse.style.setProperty("--height", accordionHeight);
+		return;
+	}
+
+	e.target.parentElement.classList.remove("show");
+	accordionCollapse.style.setProperty("--height", 0);
+	accordionBtnEl
+		.querySelector(".material-icons")
+		.style.setProperty("--rotate", 0);
 });
